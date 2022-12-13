@@ -11,7 +11,7 @@
     int err = z32_encode(buffer, buffer_len, string, &string_len); \
     assert(err == 0); \
     assert(string_len == strlen(expected)); \
-    assert(strcmp(string, expected) == 0); \
+    assert(strncmp(string, expected, string_len) == 0); \
   };
 
 int
