@@ -4,7 +4,7 @@ Encoder and decoder for z-base-32 in C.
 
 ## API
 
-See [`includes/z32.h`](include/z32.h) for the public API.
+See [`include/z32.h`](include/z32.h) for the public API.
 
 ## License
 
