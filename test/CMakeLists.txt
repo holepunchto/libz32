@@ -12,18 +12,24 @@ foreach(test IN LISTS tests)
   target_link_libraries(
     ${test}
     PRIVATE
-      z32_shared
+      z32_static
   )
 
   target_include_directories(
     ${test}
     PRIVATE
-      $<TARGET_PROPERTY:z32,INCLUDE_DIRECTORIES>
+      $<TARGET_PROPERTY:z32,INTERFACE_INCLUDE_DIRECTORIES>
   )
 
   add_test(
     NAME ${test}
     COMMAND ${test}
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
+
+  set_tests_properties(
+    ${test}
+    PROPERTIES
+    TIMEOUT 30000
   )
 endforeach()
