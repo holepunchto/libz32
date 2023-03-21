@@ -1,4 +1,7 @@
 #include <math.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #include "../include/z32.h"
 
@@ -15,7 +18,9 @@ z32_encode (const uint8_t *buffer, size_t buffer_len, char *string, size_t *stri
     return 0;
   }
 
-  if (*string_len < len + 1) return -1;
+  if (*string_len < len) return -1;
+
+  bool terminate = *string_len > len;
 
   *string_len = len;
 
@@ -50,7 +55,7 @@ z32_encode (const uint8_t *buffer, size_t buffer_len, char *string, size_t *stri
     string[k++] = z32_alphabet[chunk[4] & 0x1f];
   }
 
-  string[k] = '\0';
+  if (terminate) string[k] = '\0';
 
   return 0;
 }
