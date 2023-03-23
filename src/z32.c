@@ -81,7 +81,7 @@ z32_decode (const char *string, size_t string_len, uint8_t *buffer, size_t *buff
     for (size_t j = 0; j < 8; j++) {
       chunk[j] = i + j < n ? z32_inverse_alphabet[string[i + j]] : 0;
 
-      if (chunk[j] == -1) return -1;
+      if (chunk[j] == (char) -1) return -1;
     }
 
     buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
