@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.22)
 
 project(z32 C)
 
+if(NOT TARGET utf)
+  add_subdirectory(vendor/libutf EXCLUDE_FROM_ALL)
+endif()
+
 add_library(z32 OBJECT)
 
 set_target_properties(
@@ -23,6 +27,7 @@ target_include_directories(
   z32
   PUBLIC
     include
+    $<TARGET_PROPERTY:utf,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 add_library(z32_shared SHARED $<TARGET_OBJECTS:z32>)

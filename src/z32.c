@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <utf.h>
 
 #include "../include/z32.h"
 
@@ -10,7 +11,7 @@ static const char z32_alphabet[32] = "ybndrfg8ejkmcpqxot1uwisza345h769";
 static const char z32_inverse_alphabet[256] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 18, -1, 25, 26, 27, 30, 29, 7, 31, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 24, 1, 12, 3, 8, 5, 6, 28, 21, 9, 10, -1, 11, 2, 16, 13, 14, 4, 22, 17, 19, -1, 20, 15, 0, 23, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
 int
-z32_encode (const uint8_t *buffer, size_t buffer_len, char *string, size_t *string_len) {
+z32_encode (const uint8_t *buffer, size_t buffer_len, utf8_t *string, size_t *string_len) {
   size_t len = (size_t) ceil((double) buffer_len * 8.0 / 5.0);
 
   if (string == NULL) {
@@ -61,7 +62,7 @@ z32_encode (const uint8_t *buffer, size_t buffer_len, char *string, size_t *stri
 }
 
 int
-z32_decode (const char *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
+z32_decode (const utf8_t *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
   size_t len = (size_t) floor((double) string_len * 5.0 / 8.0);
 
   if (buffer == NULL) {
