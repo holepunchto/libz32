@@ -8,4 +8,4 @@ See [`include/z32.h`](include/z32.h) for the public API.
 
 ## License
 
-ISC
+Apache 2.0
