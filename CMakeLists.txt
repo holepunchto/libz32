@@ -39,6 +39,14 @@ set_target_properties(
   WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
 
+if(UNIX)
+  target_link_libraries(
+    z32_shared
+    PRIVATE
+      m
+  )
+endif()
+
 add_library(z32_static STATIC $<TARGET_OBJECTS:z32>)
 
 set_target_properties(
@@ -46,6 +54,14 @@ set_target_properties(
   PROPERTIES
   OUTPUT_NAME z32
 )
+
+if(UNIX)
+  target_link_libraries(
+    z32_static
+    PRIVATE
+      m
+  )
+endif()
 
 install(TARGETS z32_shared z32_static)
 
