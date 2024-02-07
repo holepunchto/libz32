@@ -39,6 +39,12 @@ set_target_properties(
   WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
 
+target_link_libraries(
+  z32_shared
+  PUBLIC
+    z32
+)
+
 if(UNIX)
   target_link_libraries(
     z32_shared
@@ -47,12 +53,18 @@ if(UNIX)
   )
 endif()
 
-add_library(z32_static STATIC $<TARGET_OBJECTS:z32>)
+add_library(z32_static STATIC)
 
 set_target_properties(
   z32_static
   PROPERTIES
   OUTPUT_NAME z32
+)
+
+target_link_libraries(
+  z32_static
+  PUBLIC
+    z32
 )
 
 if(UNIX)
@@ -69,5 +81,6 @@ install(FILES include/z32.h DESTINATION include)
 
 if(PROJECT_IS_TOP_LEVEL)
   enable_testing()
+
   add_subdirectory(test)
 endif()
