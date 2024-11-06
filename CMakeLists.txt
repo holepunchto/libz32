@@ -59,6 +59,7 @@ set_target_properties(
   z32_static
   PROPERTIES
   OUTPUT_NAME z32
+  PREFIX lib
 )
 
 target_link_libraries(
