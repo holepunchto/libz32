@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "libz32",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/libz32.git"
+  },
+  "author": "Holepunch",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/libz32/issues"
+  },
+  "homepage": "https://github.com/holepunchto/libz32#readme",
+  "dependencies": {
+    "cmake-fetch": "^1.0.0"
+  }
+}
