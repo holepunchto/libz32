@@ -209,22 +209,22 @@ z32__decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, s
   return 0;
 }
 
-inline int
+int
 z32_encode_utf8(const uint8_t *buffer, size_t buffer_len, utf8_t *string, size_t *string_len) {
   return z32__encode_utf8(buffer, buffer_len, string, string_len);
 }
 
-inline int
+int
 z32_decode_utf8(const utf8_t *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
   return z32__decode_utf8(string, string_len, buffer, buffer_len);
 }
 
-inline int
+int
 z32_encode_utf16le(const uint8_t *buffer, size_t buffer_len, utf16_t *string, size_t *string_len) {
   return z32__encode_utf16le(buffer, buffer_len, string, string_len);
 }
 
-inline int
+int
 z32_decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
   return z32__decode_utf16le(string, string_len, buffer, buffer_len);
 }
