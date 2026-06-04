@@ -141,21 +141,23 @@ z32__decode_utf8(const utf8_t *string, size_t string_len, uint8_t *buffer, size_
       if (chunk[j] == (char) -1) return -1;
     }
 
-    buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
-
     if (i + 1 >= n) break;
 
-    buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
+    buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
 
     if (i + 3 >= n) break;
 
-    buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
+    buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
 
     if (i + 4 >= n) break;
 
-    buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
+    buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
 
     if (i + 6 >= n) break;
+
+    buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
+
+    if (i + 7 >= n) break;
 
     buffer[k++] = (chunk[6] << 5) | chunk[7];
   }
@@ -182,26 +184,36 @@ z32__decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, s
     char chunk[8];
 
     for (size_t j = 0; j < 8; j++) {
-      chunk[j] = i + j < n ? z32__inverse_alphabet[string[i + j]] : 0;
+      if (i + j < n) {
+        utf16_t ch = string[i + j];
+
+        if (ch > 0xff) return -1;
+
+        chunk[j] = z32__inverse_alphabet[ch];
+      } else {
+        chunk[j] = 0;
+      }
 
       if (chunk[j] == (char) -1) return -1;
     }
 
-    buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
-
     if (i + 1 >= n) break;
 
-    buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
+    buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
 
     if (i + 3 >= n) break;
 
-    buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
+    buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
 
     if (i + 4 >= n) break;
 
-    buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
+    buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
 
     if (i + 6 >= n) break;
+
+    buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
+
+    if (i + 7 >= n) break;
 
     buffer[k++] = (chunk[6] << 5) | chunk[7];
   }
