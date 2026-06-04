@@ -36,27 +36,27 @@ z32__encode_utf8(const uint8_t *buffer, size_t buffer_len, utf8_t *string, size_
     uint8_t chunk[5];
 
     for (size_t j = 0; j < 5; j++) {
-      chunk[j] = i + j < n ? buffer[i + j] : 0;
+      chunk[j] = j < n - i ? buffer[i + j] : 0;
     }
 
     string[k++] = z32__alphabet[(chunk[0] & 0xf8) >> 3];
     string[k++] = z32__alphabet[(chunk[0] & 0x07) << 2 | (chunk[1] & 0xc0) >> 6];
 
-    if (i + 1 >= n) break;
+    if (n - i <= 1) break;
 
     string[k++] = z32__alphabet[(chunk[1] & 0x3e) >> 1];
     string[k++] = z32__alphabet[(chunk[1] & 0x01) << 4 | (chunk[2] & 0xf0) >> 4];
 
-    if (i + 2 >= n) break;
+    if (n - i <= 2) break;
 
     string[k++] = z32__alphabet[(chunk[2] & 0x0f) << 1 | (chunk[3] & 0x80) >> 7];
 
-    if (i + 3 >= n) break;
+    if (n - i <= 3) break;
 
     string[k++] = z32__alphabet[(chunk[3] & 0x7c) >> 2];
     string[k++] = z32__alphabet[(chunk[3] & 0x03) << 3 | (chunk[4] & 0xe0) >> 5];
 
-    if (i + 4 >= n) break;
+    if (n - i <= 4) break;
 
     string[k++] = z32__alphabet[chunk[4] & 0x1f];
   }
@@ -87,27 +87,27 @@ z32__encode_utf16le(const uint8_t *buffer, size_t buffer_len, utf16_t *string, s
     uint8_t chunk[5];
 
     for (size_t j = 0; j < 5; j++) {
-      chunk[j] = i + j < n ? buffer[i + j] : 0;
+      chunk[j] = j < n - i ? buffer[i + j] : 0;
     }
 
     string[k++] = z32__alphabet[(chunk[0] & 0xf8) >> 3];
     string[k++] = z32__alphabet[(chunk[0] & 0x07) << 2 | (chunk[1] & 0xc0) >> 6];
 
-    if (i + 1 >= n) break;
+    if (n - i <= 1) break;
 
     string[k++] = z32__alphabet[(chunk[1] & 0x3e) >> 1];
     string[k++] = z32__alphabet[(chunk[1] & 0x01) << 4 | (chunk[2] & 0xf0) >> 4];
 
-    if (i + 2 >= n) break;
+    if (n - i <= 2) break;
 
     string[k++] = z32__alphabet[(chunk[2] & 0x0f) << 1 | (chunk[3] & 0x80) >> 7];
 
-    if (i + 3 >= n) break;
+    if (n - i <= 3) break;
 
     string[k++] = z32__alphabet[(chunk[3] & 0x7c) >> 2];
     string[k++] = z32__alphabet[(chunk[3] & 0x03) << 3 | (chunk[4] & 0xe0) >> 5];
 
-    if (i + 4 >= n) break;
+    if (n - i <= 4) break;
 
     string[k++] = z32__alphabet[chunk[4] & 0x1f];
   }
@@ -136,26 +136,28 @@ z32__decode_utf8(const utf8_t *string, size_t string_len, uint8_t *buffer, size_
     char chunk[8];
 
     for (size_t j = 0; j < 8; j++) {
-      chunk[j] = i + j < n ? z32__inverse_alphabet[string[i + j]] : 0;
+      chunk[j] = j < n - i ? z32__inverse_alphabet[string[i + j]] : 0;
 
       if (chunk[j] == (char) -1) return -1;
     }
 
+    if (n - i <= 1) break;
+
     buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
 
-    if (i + 1 >= n) break;
+    if (n - i <= 3) break;
 
     buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
 
-    if (i + 3 >= n) break;
+    if (n - i <= 4) break;
 
     buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
 
-    if (i + 4 >= n) break;
+    if (n - i <= 6) break;
 
     buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
 
-    if (i + 6 >= n) break;
+    if (n - i <= 7) break;
 
     buffer[k++] = (chunk[6] << 5) | chunk[7];
   }
@@ -182,26 +184,36 @@ z32__decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, s
     char chunk[8];
 
     for (size_t j = 0; j < 8; j++) {
-      chunk[j] = i + j < n ? z32__inverse_alphabet[string[i + j]] : 0;
+      if (j < n - i) {
+        utf16_t ch = string[i + j];
+
+        if (ch > 0xff) return -1;
+
+        chunk[j] = z32__inverse_alphabet[ch];
+      } else {
+        chunk[j] = 0;
+      }
 
       if (chunk[j] == (char) -1) return -1;
     }
 
+    if (n - i <= 1) break;
+
     buffer[k++] = (chunk[0] << 3) | (chunk[1] >> 2);
 
-    if (i + 1 >= n) break;
+    if (n - i <= 3) break;
 
     buffer[k++] = (chunk[1] << 6) | (chunk[2] << 1) | (chunk[3] >> 4);
 
-    if (i + 3 >= n) break;
+    if (n - i <= 4) break;
 
     buffer[k++] = (chunk[3] << 4) | (chunk[4] >> 1);
 
-    if (i + 4 >= n) break;
+    if (n - i <= 6) break;
 
     buffer[k++] = (chunk[4] << 7) | (chunk[5] << 2) | (chunk[6] >> 3);
 
-    if (i + 6 >= n) break;
+    if (n - i <= 7) break;
 
     buffer[k++] = (chunk[6] << 5) | chunk[7];
   }
