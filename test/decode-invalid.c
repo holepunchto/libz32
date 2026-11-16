@@ -2,7 +2,7 @@
 #include <string.h>
 #include <utf.h>
 
-#include "../include/z32.h"
+#include <z32.h>
 
 #define test_decode_invalid(string) \
   { \

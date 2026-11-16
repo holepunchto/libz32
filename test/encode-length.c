@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "../include/z32.h"
+#include <z32.h>
 
 #define test_encode_length(buffer, expected) \
   { \

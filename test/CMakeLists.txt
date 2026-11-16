@@ -1,31 +1,17 @@
-list(APPEND tests
-  decode
-  decode-invalid
-  decode-length
-  encode
-  encode-length
+if(TARGET z32_shared)
+  set(library z32::shared)
+else()
+  set(library z32::static)
+endif()
+
+add_test_executables(
+  decode.c
+  decode-invalid.c
+  decode-length.c
+  encode.c
+  encode-length.c
+  LINK
+    ${library}
 )
-
-foreach(test IN LISTS tests)
-  add_executable(${test} ${test}.c)
-
-  target_link_libraries(
-    ${test}
-    PRIVATE
-      z32_static
-  )
-
-  add_test(
-    NAME ${test}
-    COMMAND ${test}
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-  )
-
-  set_tests_properties(
-    ${test}
-    PROPERTIES
-    TIMEOUT 30
-  )
-endforeach()
 
 add_subdirectory(fuzz)

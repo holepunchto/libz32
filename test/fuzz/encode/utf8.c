@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../../include/z32.h"
+#include <z32.h>
 
 int
 LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {

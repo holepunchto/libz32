@@ -7,6 +7,20 @@
 #include <stdint.h>
 #include <utf.h>
 
+#if defined(_WIN32)
+#if defined(Z32_BUILDING)
+#define Z32_EXPORT __declspec(dllexport)
+#elif defined(Z32_SHARED)
+#define Z32_EXPORT __declspec(dllimport)
+#else
+#define Z32_EXPORT
+#endif
+#elif defined(__GNUC__)
+#define Z32_EXPORT __attribute__((visibility("default")))
+#else
+#define Z32_EXPORT
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -221,22 +235,22 @@ z32__decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, s
   return 0;
 }
 
-inline int
+Z32_EXPORT inline int
 z32_encode_utf8(const uint8_t *buffer, size_t buffer_len, utf8_t *string, size_t *string_len) {
   return z32__encode_utf8(buffer, buffer_len, string, string_len);
 }
 
-inline int
+Z32_EXPORT inline int
 z32_decode_utf8(const utf8_t *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
   return z32__decode_utf8(string, string_len, buffer, buffer_len);
 }
 
-inline int
+Z32_EXPORT inline int
 z32_encode_utf16le(const uint8_t *buffer, size_t buffer_len, utf16_t *string, size_t *string_len) {
   return z32__encode_utf16le(buffer, buffer_len, string, string_len);
 }
 
-inline int
+Z32_EXPORT inline int
 z32_decode_utf16le(const utf16_t *string, size_t string_len, uint8_t *buffer, size_t *buffer_len) {
   return z32__decode_utf16le(string, string_len, buffer, buffer_len);
 }
