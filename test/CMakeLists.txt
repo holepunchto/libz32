@@ -1,9 +1,3 @@
-if(TARGET z32_shared)
-  set(library z32::shared)
-else()
-  set(library z32::static)
-endif()
-
 add_test_executables(
   decode.c
   decode-invalid.c
@@ -11,7 +5,7 @@ add_test_executables(
   encode.c
   encode-length.c
   LINK
-    ${library}
+    z32::<TYPE>
 )
 
 add_subdirectory(fuzz)
